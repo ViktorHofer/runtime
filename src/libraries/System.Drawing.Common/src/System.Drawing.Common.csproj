@@ -384,7 +384,6 @@
       <LogicalName>placeholder.ico</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-  <!-- References -->
   <ItemGroup>
     <Reference Include="Microsoft.Win32.Primitives" />
     <Reference Condition="'$(TargetsWindows)' == 'true'" Include="Microsoft.Win32.SystemEvents" />
