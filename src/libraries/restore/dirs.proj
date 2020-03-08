@@ -9,7 +9,6 @@
     <ProjectReference Condition="'$(BuildAllConfigurations)' == 'true'" Include="netcoreapp/netcoreapp.depproj" />
     <ProjectReference Include="netstandard/netstandard.depproj" />
     <ProjectReference Include="netfx/netfx.depproj" />
-    <ProjectReference Include="binplacePackages/binplacePackages.depproj" />
   </ItemGroup>
 
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
