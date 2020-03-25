@@ -16,8 +16,7 @@
     <ToolSetCommonDirectory>$(RepoRoot)artifacts\toolset\Common\</ToolSetCommonDirectory>
     <IsSourceProject>$([System.Text.RegularExpressions.Regex]::IsMatch($(MSBuildProjectDirectory), 'src%24'))</IsSourceProject>
     <LanguageTargets Condition="'$(MSBuildProjectExtension)' == '.depproj'">$(RepositoryEngineeringDir)depProj.common.targets</LanguageTargets>
-    <RuntimePropsFile>$([MSBuild]::NormalizePath('$(ArtifactsDir)', 'tmp', '$(Configuration)', 'RuntimeOS.props'))</RuntimePropsFile>
-    <RuntimeGraph>$(LibrariesProjectRoot)\OSGroups.json</RuntimeGraph>
+    <RuntimeGraph>$(LibrariesProjectRoot)OSGroups.json</RuntimeGraph>
     <BuildTargetFramework>netcoreapp5.0</BuildTargetFramework>
     <ShouldUnsetParentConfigurationAndPlatform>false</ShouldUnsetParentConfigurationAndPlatform>
     <!-- TargetOS can be removed after renaming the property in arcade repo-->
