@@ -3,8 +3,12 @@
 
   <Import Project="netfxreference.props" />
 
+  <!-- All shims are part of the microsoft.netcore.app shared framework. -->
+  <ItemGroup>
+    <NetCoreAppLibrary Include="@(NetFxReference)" />
+  </ItemGroup>
+
   <PropertyGroup>
-    <IsNETCoreApp>true</IsNETCoreApp>
     <NuGetTargetMoniker Condition="'$(NuGetTargetMoniker)' == ''">$(TargetFramework)</NuGetTargetMoniker>
   </PropertyGroup>
 

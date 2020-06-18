@@ -1,0 +1,145 @@
+<Project>
+  <ItemGroup>
+    <NetCoreAppLibrary Include="Microsoft.CSharp" />
+    <NetCoreAppLibrary Include="Microsoft.VisualBasic.Core" />
+    <NetCoreAppLibrary Include="Microsoft.Win32.Primitives" />
+    <NetCoreAppLibrary Include="Microsoft.Win32.Registry" NetCoreAppReference="false" />
+    <NetCoreAppLibrary Include="System.AppContext" />
+    <NetCoreAppLibrary Include="System.Buffers" />
+    <NetCoreAppLibrary Include="System.Collections" />
+    <NetCoreAppLibrary Include="System.Collections.Concurrent" />
+    <NetCoreAppLibrary Include="System.Collections.Immutable" />
+    <NetCoreAppLibrary Include="System.Collections.NonGeneric" />
+    <NetCoreAppLibrary Include="System.Collections.Specialized" />
+    <NetCoreAppLibrary Include="System.ComponentModel" />
+    <NetCoreAppLibrary Include="System.ComponentModel.Annotations" />
+    <NetCoreAppLibrary Include="System.ComponentModel.EventBasedAsync" />
+    <NetCoreAppLibrary Include="System.ComponentModel.Primitives" />
+    <NetCoreAppLibrary Include="System.ComponentModel.TypeConverter" />
+    <NetCoreAppLibrary Include="System.Console" />
+    <NetCoreAppLibrary Include="System.Data.Common" />
+    <NetCoreAppLibrary Include="System.Data.DataSetExtensions" />
+    <NetCoreAppLibrary Include="System.Diagnostics.Contracts" />
+    <NetCoreAppLibrary Include="System.Diagnostics.Debug" />
+    <NetCoreAppLibrary Include="System.Diagnostics.DiagnosticSource" />
+    <NetCoreAppLibrary Include="System.Diagnostics.FileVersionInfo" />
+    <NetCoreAppLibrary Include="System.Diagnostics.Process" />
+    <NetCoreAppLibrary Include="System.Diagnostics.StackTrace" />
+    <NetCoreAppLibrary Include="System.Diagnostics.TextWriterTraceListener" />
+    <NetCoreAppLibrary Include="System.Diagnostics.Tools" />
+    <NetCoreAppLibrary Include="System.Diagnostics.TraceSource" />
+    <NetCoreAppLibrary Include="System.Diagnostics.Tracing" />
+    <NetCoreAppLibrary Include="System.Drawing.Primitives" />
+    <NetCoreAppLibrary Include="System.Dynamic.Runtime" />
+    <NetCoreAppLibrary Include="System.Formats.Asn1" />
+    <NetCoreAppLibrary Include="System.Globalization" />
+    <NetCoreAppLibrary Include="System.Globalization.Calendars" />
+    <NetCoreAppLibrary Include="System.Globalization.Extensions" />
+    <NetCoreAppLibrary Include="System.IO" />
+    <NetCoreAppLibrary Include="System.IO.Compression" />
+    <NetCoreAppLibrary Include="System.IO.Compression.Brotli" />
+    <NetCoreAppLibrary Include="System.IO.Compression.ZipFile" />
+    <NetCoreAppLibrary Include="System.IO.FileSystem" />
+    <NetCoreAppLibrary Include="System.IO.FileSystem.AccessControl" NetCoreAppReference="false" />
+    <NetCoreAppLibrary Include="System.IO.FileSystem.DriveInfo" />
+    <NetCoreAppLibrary Include="System.IO.FileSystem.Primitives" />
+    <NetCoreAppLibrary Include="System.IO.FileSystem.Watcher" />
+    <NetCoreAppLibrary Include="System.IO.IsolatedStorage" />
+    <NetCoreAppLibrary Include="System.IO.MemoryMappedFiles" />
+    <NetCoreAppLibrary Include="System.IO.Pipes" />
+    <NetCoreAppLibrary Include="System.IO.Pipes.AccessControl" NetCoreAppReference="false" />
+    <NetCoreAppLibrary Include="System.IO.UnmanagedMemoryStream" />
+    <NetCoreAppLibrary Include="System.Linq" />
+    <NetCoreAppLibrary Include="System.Linq.Expressions" />
+    <NetCoreAppLibrary Include="System.Linq.Parallel" />
+    <NetCoreAppLibrary Include="System.Linq.Queryable" />
+    <NetCoreAppLibrary Include="System.Memory" />
+    <NetCoreAppLibrary Include="System.Net.Http" />
+    <NetCoreAppLibrary Include="System.Net.Http.Json" />
+    <NetCoreAppLibrary Include="System.Net.HttpListener" />
+    <NetCoreAppLibrary Include="System.Net.Mail" />
+    <NetCoreAppLibrary Include="System.Net.NameResolution" />
+    <NetCoreAppLibrary Include="System.Net.NetworkInformation" />
+    <NetCoreAppLibrary Include="System.Net.Ping" />
+    <NetCoreAppLibrary Include="System.Net.Primitives" />
+    <NetCoreAppLibrary Include="System.Net.Requests" />
+    <NetCoreAppLibrary Include="System.Net.Security" />
+    <NetCoreAppLibrary Include="System.Net.ServicePoint" />
+    <NetCoreAppLibrary Include="System.Net.Sockets" />
+    <NetCoreAppLibrary Include="System.Net.WebClient" />
+    <NetCoreAppLibrary Include="System.Net.WebHeaderCollection" />
+    <NetCoreAppLibrary Include="System.Net.WebProxy" />
+    <NetCoreAppLibrary Include="System.Net.WebSockets" />
+    <NetCoreAppLibrary Include="System.Net.WebSockets.Client" />
+    <NetCoreAppLibrary Include="System.Numerics.Vectors" />
+    <NetCoreAppLibrary Include="System.ObjectModel" />
+    <NetCoreAppLibrary Include="System.Private.DataContractSerialization" NetCoreAppReference="false" />
+    <NetCoreAppLibrary Include="System.Private.Uri" />
+    <NetCoreAppLibrary Include="System.Private.Xml" NetCoreAppReference="false" />
+    <NetCoreAppLibrary Include="System.Private.Xml.Linq" NetCoreAppReference="false" />
+    <NetCoreAppLibrary Include="System.Reflection" />
+    <NetCoreAppLibrary Include="System.Reflection.DispatchProxy" />
+    <NetCoreAppLibrary Include="System.Reflection.Emit" />
+    <NetCoreAppLibrary Include="System.Reflection.Emit.ILGeneration" />
+    <NetCoreAppLibrary Include="System.Reflection.Emit.Lightweight" />
+    <NetCoreAppLibrary Include="System.Reflection.Extensions" />
+    <NetCoreAppLibrary Include="System.Reflection.Metadata" />
+    <NetCoreAppLibrary Include="System.Reflection.Primitives" />
+    <NetCoreAppLibrary Include="System.Reflection.TypeExtensions" />
+    <NetCoreAppLibrary Include="System.Resources.Reader" />
+    <NetCoreAppLibrary Include="System.Resources.ResourceManager" />
+    <NetCoreAppLibrary Include="System.Resources.Writer" />
+    <NetCoreAppLibrary Include="System.Runtime" />
+    <NetCoreAppLibrary Include="System.Runtime.CompilerServices.Unsafe" />
+    <NetCoreAppLibrary Include="System.Runtime.CompilerServices.VisualC" />
+    <NetCoreAppLibrary Include="System.Runtime.Extensions" />
+    <NetCoreAppLibrary Include="System.Runtime.Handles" />
+    <NetCoreAppLibrary Include="System.Runtime.InteropServices" />
+    <NetCoreAppLibrary Include="System.Runtime.InteropServices.JavaScript" />
+    <NetCoreAppLibrary Include="System.Runtime.InteropServices.RuntimeInformation" />
+    <NetCoreAppLibrary Include="System.Runtime.Intrinsics" />
+    <NetCoreAppLibrary Include="System.Runtime.Loader" />
+    <NetCoreAppLibrary Include="System.Runtime.Numerics" />
+    <NetCoreAppLibrary Include="System.Runtime.Serialization.Formatters" />
+    <NetCoreAppLibrary Include="System.Runtime.Serialization.Json" />
+    <NetCoreAppLibrary Include="System.Runtime.Serialization.Primitives" />
+    <NetCoreAppLibrary Include="System.Runtime.Serialization.Xml" />
+    <NetCoreAppLibrary Include="System.Security.AccessControl" NetCoreAppReference="false" />
+    <NetCoreAppLibrary Include="System.Security.Claims" />
+    <NetCoreAppLibrary Include="System.Security.Cryptography.Algorithms" />
+    <NetCoreAppLibrary Include="System.Security.Cryptography.Cng" NetCoreAppReference="false" />
+    <NetCoreAppLibrary Include="System.Security.Cryptography.Csp" />
+    <NetCoreAppLibrary Include="System.Security.Cryptography.Encoding" />
+    <NetCoreAppLibrary Include="System.Security.Cryptography.OpenSsl" NetCoreAppReference="false" />
+    <NetCoreAppLibrary Include="System.Security.Cryptography.Primitives" />
+    <NetCoreAppLibrary Include="System.Security.Cryptography.X509Certificates" />
+    <NetCoreAppLibrary Include="System.Security.Principal" />
+    <NetCoreAppLibrary Include="System.Security.Principal.Windows" NetCoreAppReference="false" />
+    <NetCoreAppLibrary Include="System.Security.SecureString" />
+    <NetCoreAppLibrary Include="System.Text.Encoding" />
+    <NetCoreAppLibrary Include="System.Text.Encoding.CodePages" />
+    <NetCoreAppLibrary Include="System.Text.Encoding.Extensions" />
+    <NetCoreAppLibrary Include="System.Text.Encodings.Web" />
+    <NetCoreAppLibrary Include="System.Text.Json" />
+    <NetCoreAppLibrary Include="System.Text.RegularExpressions" />
+    <NetCoreAppLibrary Include="System.Threading" />
+    <NetCoreAppLibrary Include="System.Threading.Channels" />
+    <NetCoreAppLibrary Include="System.Threading.Overlapped" />
+    <NetCoreAppLibrary Include="System.Threading.Tasks" />
+    <NetCoreAppLibrary Include="System.Threading.Tasks.Dataflow" />
+    <NetCoreAppLibrary Include="System.Threading.Tasks.Extensions" />
+    <NetCoreAppLibrary Include="System.Threading.Tasks.Parallel" />
+    <NetCoreAppLibrary Include="System.Threading.Thread" />
+    <NetCoreAppLibrary Include="System.Threading.ThreadPool" />
+    <NetCoreAppLibrary Include="System.Threading.Timer" />
+    <NetCoreAppLibrary Include="System.Transactions.Local" />
+    <NetCoreAppLibrary Include="System.ValueTuple" />
+    <NetCoreAppLibrary Include="System.Web.HttpUtility" />
+    <NetCoreAppLibrary Include="System.Xml.ReaderWriter" />
+    <NetCoreAppLibrary Include="System.Xml.XDocument" />
+    <NetCoreAppLibrary Include="System.Xml.XmlDocument" />
+    <NetCoreAppLibrary Include="System.Xml.XmlSerializer" />
+    <NetCoreAppLibrary Include="System.Xml.XPath" />
+    <NetCoreAppLibrary Include="System.Xml.XPath.XDocument" />
+  </ItemGroup>
+</Project>

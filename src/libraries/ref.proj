@@ -6,18 +6,26 @@
 
   <ItemGroup>
     <GeneratedShimProject Include="shims\generated\*.csproj" />
+    <NonNetCoreAppProject Include="$(MSBuildThisFileDirectory)*\ref\*.csproj"
+                               Exclude="@(ProjectExclusions);
+                                        @(NetCoreAppLibrary->'%(Identity)\ref\%(Identity).csproj')" />
+
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(MSBuildThisFileDirectory)*\ref\*.*proj" Exclude="@(ProjectExclusions)" />
+    <ProjectReference Include="NetCoreApp.proj" AdditionalProperties="BuildRuntimePack=false" />
+
     <!-- Restore only and build later. -->
-    <ProjectReference Include="@(GeneratedShimProject)" Condition="'$(MSBuildRestoreSessionId)' != ''" />
+    <ProjectReference Include="@(GeneratedShimProject);
+                               @(NonNetCoreAppProject)"
+                      Condition="'$(MSBuildRestoreSessionId)' != ''" />
   </ItemGroup>
 
-  <Target Name="BuildGeneratedShims"
+  <Target Name="BuildAfterSharedFramework"
           AfterTargets="Build">
     <MSBuild Targets="Build"
-             Projects="@(GeneratedShimProject)"
+             Projects="@(NonNetCoreAppProject);@(GeneratedShimProject)"
+             BuildInParallel="true"
              Properties="$(TraversalGlobalProperties)" />
   </Target>
 

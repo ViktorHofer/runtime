@@ -10,22 +10,14 @@
   <Target Name="FindNetCoreAppPackages">
 
     <ItemGroup>
-      <PkgProjGlobPath Include="$(LibrariesProjectRoot)*\pkg\**\*.pkgproj" />
-    </ItemGroup>
+      <PrereleaseLibraryPackage Include="$(LibrariesProjectRoot)*\pkg\**\*.pkgproj" />
 
-    <MSBuild Projects="@(PkgProjGlobPath)"
-             Targets="IsNotNetCoreAppProject"
-             BuildInParallel="true">
-      <Output TaskParameter="TargetOutputs" ItemName="PrereleaseLibraryPackage" />
-    </MSBuild>
-
-    <ItemGroup>
       <NonNetCoreAppPackage Include="Microsoft.Diagnostics.Tracing.EventSource.Redist" />
       <NonNetCoreAppPackage Include="Microsoft.IO.Redist" />
 
-      <IndexedDependency Include="@(PrereleaseLibraryPackage)"
-                  Exclude="@(NonNetCoreAppPackage)"
-                  Condition="!$([System.String]::new('%(Identity)').Contains('Private')) and !$([System.String]::new('%(Identity)').EndsWith('Experimental')) and !$([System.String]::new('%(Identity)').StartsWith('runtime.'))" />
+      <IndexedDependency Include="@(PrereleaseLibraryPackage->'%(Filename)')"
+                         Exclude="@(NetCoreAppLibrary);@(NonNetCoreAppPackage)"
+                         Condition="!$([System.String]::new('%(Identity)').Contains('Private')) and !$([System.String]::new('%(Identity)').EndsWith('Experimental')) and !$([System.String]::new('%(Identity)').StartsWith('runtime.'))" />
     </ItemGroup>
     
   </Target>

@@ -3,6 +3,7 @@
     <SkipImportArcadeSdkFromRoot>true</SkipImportArcadeSdkFromRoot>
   </PropertyGroup>
   <Import Project="..\..\Directory.Build.props" />
+  <Import Project="NetCoreAppLibrary.props" />
 
   <PropertyGroup Condition="$(MSBuildProjectName.StartsWith('Microsoft.Extensions.'))">
     <IsAspNetCoreApp>true</IsAspNetCoreApp>

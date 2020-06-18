@@ -10,19 +10,20 @@
     <ManualShimProject Include="shims\manual\*.csproj" />
     <ApiCompatProject Include="shims\ApiCompat.proj"
                       Condition="'$(DotNetBuildFromSource)' != 'true' and '$(BuildTargetFramework)' == '$(NetCoreAppCurrent)'" />
-  </ItemGroup>
-
-  <!-- Restore only and build before/after. -->
-  <ItemGroup Condition="'$(MSBuildRestoreSessionId)' != ''">
-    <ProjectReference Include="@(NativeBinPlaceProject)" />
-    <ProjectReference Include="@(ManualShimProject)" />
-    <ProjectReference Include="@(ApiCompatProject)" />
+    <NonNetCoreAppProject Include="$(MSBuildThisFileDirectory)*\src\*.csproj"
+                               Exclude="@(ProjectExclusions);
+                                        @(NetCoreAppLibrary->'%(Identity)\src\%(Identity).csproj')" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(MSBuildThisFileDirectory)*\src\*.csproj" Exclude="@(ProjectExclusions)" />
-    <ProjectReference Include="$(MSBuildThisFileDirectory)*\src\*.ilproj" Exclude="@(ProjectExclusions)" />
-    <ProjectReference Include="$(MSBuildThisFileDirectory)*\src\*.vbproj" Exclude="@(ProjectExclusions)" />
+    <ProjectReference Include="NetCoreApp.proj" AdditionalProperties="BuildRefPack=false" />
+
+    <!-- Restore only and build before/after. -->
+    <ProjectReference Include="@(NativeBinPlaceProject);
+                               @(ManualShimProject);
+                               @(ApiCompatProject);
+                               @(NonNetCoreAppProject)"
+                      Condition="'$(MSBuildRestoreSessionId)' != ''" />
   </ItemGroup>
 
   <Import Condition="'$(TargetOS)' == 'Browser'" Project="$(MonoProjectRoot)wasm\wasm.targets" />
@@ -35,16 +36,17 @@
              Properties="$(TraversalGlobalProperties)" />
   </Target>
 
-  <Target Name="BuildManualShims"
+  <Target Name="BuildAfterSharedFramework"
           AfterTargets="Build">
     <MSBuild Targets="Build"
-             Projects="@(ManualShimProject)"
+             BuildInParallel="true"
+             Projects="@(NonNetCoreAppProject);@(ManualShimProject)"
              Properties="$(TraversalGlobalProperties)" />
   </Target>
 
   <Target Name="RunApiCompat"
           Condition="'@(ApiCompatProject)' != ''"
-          AfterTargets="BuildManualShims">
+          AfterTargets="BuildAfterSharedFramework">
     <MSBuild Targets="Build"
              Projects="@(ApiCompatProject)"
              Properties="$(TraversalGlobalProperties)" />
