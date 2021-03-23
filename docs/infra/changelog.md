@@ -1,11 +1,11 @@
 # March 2021
 
 Welcome to the March 2021 changelog of dotnet/runtime's infrastructure. There are a number of updates that we hope you will like, some of the key highlights include:
-- :heavy_check_mark: [Unified GitHub project board](https://github.com/dotnet/runtime/projects/26) to track all infrastructure related work
-- :heavy_check_mark: [Default branch has been renamed to main](https://github.com/dotnet/runtime/issues/48357)
-- :heavy_check_mark: [Improve coreclr windows native build time](https://github.com/dotnet/runtime/issues/33872)
-- :heavy_check_mark: [Enable building repo on Windows ARM64](https://github.com/dotnet/runtime/pull/49864)
-- :heavy_check_mark: [Creating a separate pipeline to stage onboarding new test targets](https://github.com/dotnet/runtime/issues/44031)
+- :heavy_check_mark: [Unified GitHub project board](#unified-github-project-board) to track all infrastructure related work
+- :heavy_check_mark: [Default branch has been renamed to main](#default-branch-has-been-renamed-to-main)
+- :heavy_check_mark: [Improve CoreCLR Windows native build time](#improve-coreclr-windows-native-build-time)
+- :heavy_check_mark: [Enable building runtime repository on Windows ARM64](#enable-building-runtime-repository-on-windows-arm64)
+- :heavy_check_mark: [Creating a separate pipeline to stage onboarding new test targets](#creating-a-separate-pipeline-to-stage-onboarding-new-test-targets)
 
 ### :bulb: Enhancements
 - [Consolidate VS detection logic](https://github.com/dotnet/runtime/pull/49593)
@@ -49,7 +49,7 @@ MSBuild's support for effective parallelisation is limited. To make builds as fa
 
 :bulb: What just recently changed is that Ninja is now the [default CMake generator on Windows](https://github.com/dotnet/runtime/pull/49715).
 
-## Enable building repo on Windows ARM64
+## Enable building runtime repository on Windows ARM64
 The runtime repository failed to build on Windows ARM64 devices like the Surface Pro X, mainly because the wrong set of dac tools were chosen. This was  [just recently fixed](https://github.com/dotnet/runtime/pull/49864).
 
 :warning: The x86 emulation of Git for Windows doesn't work yet on Windows ARM64. Native ARM64 execution is expected to be official supported in one of the following month's releases. See https://github.com/git-for-windows/git/issues/3107 for more details.
