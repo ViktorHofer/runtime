@@ -63,4 +63,4 @@ For that purpose the runtime-staging pipeline was added to the repository and ru
 
 :information_source: Test failures happening in that pipeline don't impact the overall status of the PR.
 
-:warning: Configurations ("legs") in that pipeline which time out (i.e. because of limited devices being available) count as failures and impact the Pull Requests's status.
+:warning: Configurations ("legs") in that pipeline which time out (i.e. because of limited devices being available) count as failures and impact the Pull Request's status.
