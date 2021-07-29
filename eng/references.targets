@@ -1,4 +1,4 @@
-<Project>
+<Project InitialTargets="UpdateProjectReferencesWithPrivateAttribute">
   <PropertyGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
     <!--
       Disable RAR from transitively discovering dependencies for references. This is required as we don't copy
@@ -37,15 +37,17 @@
 
   <!-- Make shared framework assemblies not app-local (non private). -->
   <Target Name="UpdateProjectReferencesWithPrivateAttribute"
-          AfterTargets="AssignProjectConfiguration"
-          BeforeTargets="PrepareProjectReferences"
           Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' and
-                     ('$(IsTestProject)' == 'true' or '$(IsTestSupportProject)' == 'true') and
-                     '@(ProjectReferenceWithConfiguration)' != ''">
+                     ('$(IsSourceProject)' == 'true' or '$(IsTestProject)' == 'true' or '$(IsTestSupportProject)' == 'true') and
+                     '@(ProjectReference)' != ''">
     <ItemGroup>
-      <ProjectReferenceWithConfiguration PrivateAssets="all"
-                                         Private="false"
-                                         Condition="$(NetCoreAppLibrary.Contains('%(Filename);'))" />
+      <_NetCoreAppLibraryWithProjectReference Include="@(NetCoreAppLibrary)"
+                                              ProjectReferenceFilename="%(ProjectReference.Filename)" />
+      <ProjectReference Update="@(_NetCoreAppLibraryWithProjectReference)"
+                        Condition="'%(_NetCoreAppLibraryWithProjectReference.Identity)' == '%(_NetCoreAppLibraryWithProjectReference.ProjectReferenceFilename)' and
+                                   '%(_NetCoreAppLibraryWithProjectReference.IsPackable)' != 'true'"
+                        PrivateAssets="all"
+                        Private="false" />
     </ItemGroup>
   </Target>
 
