@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.Build.Traversal">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetCoreAppCurrent)-$(TargetOS)</TargetFramework>
+    <!-- Reference the dependencies to pass pass them down to projects which reference this project. -->
+    <TraversalDoNotReferenceOutputAssemblies>false</TraversalDoNotReferenceOutputAssemblies>
+    <!-- ReferencePath shouldn't be populated with package assets or transitives. -->
+    <SkipResolvePackageAssets>true</SkipResolvePackageAssets>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="generated\*.csproj" />
+  </ItemGroup>
+
+</Project>

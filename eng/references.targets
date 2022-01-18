@@ -8,9 +8,10 @@
   </PropertyGroup>
 
    <!-- If a CoreLib ProjectReference is present, make all P2P assets non transitive. -->
-  <ItemGroup Condition="'@(ProjectReference)' != '' and
-                         @(ProjectReference->AnyHaveMetadataValue('Identity', '$(CoreLibProject)'))">
-    <ProjectReference Update="@(ProjectReference)"
+  <ItemGroup Condition="'$(IsSourceProject)' == 'true' and
+                        '@(ProjectReference)' != '' and
+                        @(ProjectReference->AnyHaveMetadataValue('Identity', '$(CoreLibProject)'))">
+    <ProjectReference Update="@(ProjectReference->WithMetadataValue('PrivateAssets', ''))"
                       PrivateAssets="all" />
   </ItemGroup>
 
@@ -55,8 +56,32 @@
     </TargetPathWithTargetPlatformMoniker>
   </ItemDefinitionGroup>
 
-  <Target Name="ValidateReferenceAssemblyProjectReferences" Condition="'$(IsReferenceAssembly)' == 'true'" AfterTargets="ResolveReferences">
+  <Target Name="ValidateReferenceAssemblyProjectReferences"
+          Condition="'$(IsReferenceAssembly)' == 'true' and
+                     '$(SkipValidateReferenceAssemblyProjectReferences)' != 'true'"
+          AfterTargets="ResolveReferences">
     <Error Condition="'%(ReferencePath.ReferenceSourceTarget)' == 'ProjectReference' AND '%(ReferencePath.IsReferenceAssembly)' != 'true' AND '%(ReferencePath.ReferenceAssembly)' == ''"
            Text="Reference assemblies must only reference other reference assemblies and '%(ReferencePath.ProjectReferenceOriginalItemSpec)' is not a reference assembly project and does not set 'ProduceReferenceAssembly'." />
+  </Target>
+
+  <!-- An opt-in target to trim out private assemblies from the ref assembly ReferencePath. -->
+  <Target Name="TrimOutPrivateAssembliesFromReferencePath"
+          Condition="'$(CompileUsingReferenceAssemblies)' == 'true'"
+          AfterTargets="FindReferenceAssembliesForReferences">
+    <ItemGroup>
+      <ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies)"
+                                      Condition="$(NetCoreAppLibraryNoReference.Contains('%(Filename);'))" />
+    </ItemGroup>
+  </Target>
+
+  <!-- An opt-in target to trim out external dependencies, restored and referenced by NuGet. -->
+  <Target Name="TrimExternalReferences"
+          Condition="'$(TrimExternalReferences)' == 'true'"
+          AfterTargets="ResolveLockFileReferences"
+          BeforeTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <Reference Remove="@(Reference->WithMetadataValue('ExternallyResolved', 'true'))"
+                 Condition="'%(NuGetPackageId)' != 'System.Data.SqlClient'" />
+    </ItemGroup>
   </Target>
 </Project>

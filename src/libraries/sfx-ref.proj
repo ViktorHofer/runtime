@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.Build.NoTargets">
+
+  <!-- This project is a hack and solely needs to exist as shared framework projects currently don't use P2Ps to reference each other.
+       Therefore reference assemblies must be available in the targeting pack directory before the shared framework source projects are built. -->
+
+  <PropertyGroup>
+    <TargetFramework>$(NetCoreAppCurrent)</TargetFramework>
+    <!-- Reference the dependencies to pass pass them down to projects which reference this project. -->
+    <NoTargetsDoNotReferenceOutputAssemblies>false</NoTargetsDoNotReferenceOutputAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AnyProject Include="$(MSBuildThisFileDirectory)*\ref\*.csproj"
+                Exclude="@(ProjectExclusions)" />
+    <NonNetCoreAppProject Include="@(AnyProject)"
+                          Exclude="@(NetCoreAppLibrary->'%(Identity)\ref\%(Identity).csproj')" />
+    <ProjectReference Include="@(AnyProject)"
+                      Exclude="@(NonNetCoreAppProject)" />
+  </ItemGroup>
+
+</Project>

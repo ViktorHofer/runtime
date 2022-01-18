@@ -1,0 +1,108 @@
+<Project Sdk="Microsoft.Build.NoTargets">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetCoreAppCurrent)-$(TargetOS)</TargetFramework>
+    <NoTargetsDoNotReferenceOutputAssemblies>false</NoTargetsDoNotReferenceOutputAssemblies>
+    <!-- Don't populate the ReferencePath with external dependencies. -->
+    <TrimExternalReferences>true</TrimExternalReferences>
+    <!-- By default, build the .NETCoreApp vertical only. -->
+    <BuildTargetFramework Condition="'$(BuildAllConfigurations)' != 'true'">$(NetCoreAppCurrent)</BuildTargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="oob-netcurrent.proj" Condition="'$(BuildTargetFramework)' == '$(NetCoreAppCurrent)' or '$(BuildTargetFramework)' == ''" />
+    <ProjectReference Include="oob-all.proj" Condition="'$(BuildTargetFramework)' != '$(NetCoreAppCurrent)' or
+                                                        '$(BuildTargetFramework)' == ''" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(BuildTargetFramework)' == '$(NetCoreAppCurrent)' or '$(BuildTargetFramework)' == ''">
+    <ProjectReference Include="shims\shims-generated.proj" />
+    <ProjectReference Include="shims\shims-manual.proj" />
+
+    <ProjectReference Include="apicompat\ApiCompat.proj"
+                      Condition="'$(DotNetBuildFromSource)' != 'true' and
+                                 '$(RunApiCompat)' != 'false'" />
+  </ItemGroup>
+
+  <ImportGroup Condition="'$(BuildTargetFramework)' == '$(NetCoreAppCurrent)' or '$(BuildTargetFramework)' == ''">
+    <!-- Re-generate the targeting pack's framework list to include shims. -->
+    <Import Project="frameworklist.targets" />
+    <Import Project="$(RepositoryEngineeringDir)illink.targets" />
+  </ImportGroup>
+
+  <Target Name="GetOOBAssembliesToTrim"
+          DependsOnTargets="ResolveAssemblyReferences">
+    <PropertyGroup>
+      <OOBAssembliesTrimmedArtifactsPath>$([MSBuild]::NormalizeDirectory('$(ILLinkTrimAssemblyArtifactsRootDir)', 'trimmed-oobs'))</OOBAssembliesTrimmedArtifactsPath>
+      <OOBAssembliesMarkerFile>$(IntermediateOutputPath)linker-$(TargetArchitecture)-marker.txt</OOBAssembliesMarkerFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <!-- Include suppression XML files bin-placed in earlier per-library linker run. -->
+      <OOBLibrarySuppressionsXml Include="$(ILLinkTrimAssemblyOOBSuppressionsXmlsDir)*.xml" />
+      
+      <!-- The following is the list of all the OOBs we will ignore for now -->
+      <OOBAssemblyToIgnore Include="System.CodeDom;
+                                    System.ComponentModel.Composition;
+                                    System.ComponentModel.Composition.Registration;
+                                    System.Composition.AttributedModel;
+                                    System.Composition.Convention;
+                                    System.Composition.Hosting;
+                                    System.Composition.Runtime;
+                                    System.Composition.TypedParts;
+                                    System.Configuration.ConfigurationManager;
+                                    System.Speech;
+                                    Microsoft.Extensions.DependencyInjection.Specification.Tests" />
+
+      <!-- Move items to FileName so that we can subtract them. Ignore XmlSerializer.Generator executable. -->
+      <NetCoreAppCurrentAssemblyWithFilename Include="@(ReferencePath -> '%(FileName)')"
+                                             OriginalIdentity="%(Identity)"
+                                             Exclude="dotnet-Microsoft.XmlSerializer.Generator" />
+      <SharedFrameworkAssemblyWithFilename Include="@(NetCoreAppCurrentAssemblyWithFilename)"
+                                           Condition="$(NetCoreAppLibrary.Contains('%(Identity);'))" />
+
+      <OOBAssemblyToTrimWithFileName Include="@(NetCoreAppCurrentAssemblyWithFilename)"
+                                     Exclude="@(SharedFrameworkAssemblyWithFilename);
+                                              @(OOBAssemblyToIgnore)" />
+      <OOBAssemblyReferenceWithFilename Include="@(NetCoreAppCurrentAssemblyWithFilename)"
+                                        Exclude="@(OOBAssemblyToTrimWithFileName)" />
+
+      <OOBAssemblyToTrim Include="@(OOBAssemblyToTrimWithFileName -> '%(OriginalIdentity)')" />
+      <OOBAssemblyReference Include="@(OOBAssemblyReferenceWithFilename -> '%(OriginalIdentity)')" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="ILLinkTrimOOBAssemblies"
+          AfterTargets="Build"
+          Condition="'$(BuildTargetFramework)' == '$(NetCoreAppCurrent)' or '$(BuildTargetFramework)' == ''"
+          DependsOnTargets="GetOOBAssembliesToTrim;PrepareForAssembliesTrim"
+          Inputs="$(ILLinkTasksAssembly);@(OOBAssemblyToTrim);@(OOBAssemblyReference);@(OOBLibrarySuppressionsXml)"
+          Outputs="$(OOBAssembliesMarkerFile)">
+    <Message Text="Trimming $(PackageRID) out-of-band assemblies with ILLinker..." Importance="high" />
+
+   <PropertyGroup>
+      <OOBILLinkArgs>$(ILLinkArgs)</OOBILLinkArgs>
+      <OOBILLinkArgs Condition="'@(OOBLibrarySuppressionsXml)' != ''" >$(OOBILLinkArgs) --link-attributes &quot;@(OOBLibrarySuppressionsXml->'%(FullPath)', '&quot; --link-attributes &quot;')&quot;</OOBILLinkArgs>
+    </PropertyGroup>
+
+    <ILLink AssemblyPaths=""
+        RootAssemblyNames="@(OOBAssemblyToTrim)"
+        ReferenceAssemblyPaths="@(OOBAssemblyReference)"
+        OutputDirectory="$(OOBAssembliesTrimmedArtifactsPath)"
+        ExtraArgs="$(OOBILLinkArgs)"
+        ToolExe="$(_DotNetHostFileName)"
+        ToolPath="$(_DotNetHostDirectory)" />
+
+    <!-- Create a marker file which serves as the target's output to enable incremental builds. -->
+    <MakeDir Directories="$([System.IO.Path]::GetDirectoryName('$(OOBAssembliesMarkerFile)'))" />
+    <Touch Files="$(OOBAssembliesMarkerFile)"
+           AlwaysCreate="true" />
+  </Target>
+
+  <Target Name="SetAzureDevOpsVariableForBuiltPackages"
+          Condition="'$(ContinuousIntegrationBuild)' == 'true'"
+          AfterTargets="Build;Pack">
+    <Message Condition="Exists('$(ArtifactsDir)packages')" Importance="High" Text="##vso[task.setvariable variable=_librariesBuildProducedPackages]true" />
+  </Target>
+
+</Project>

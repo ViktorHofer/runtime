@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.DotNet.SharedFramework.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <!-- Use reference assemblies for framework list generation. -->
+    <CompileUsingReferenceAssemblies>true</CompileUsingReferenceAssemblies>
+    <MicrosoftNetCoreAppRefPackFrameworkListPath>$(MicrosoftNetCoreAppRefPackDataDir)FrameworkList.xml</MicrosoftNetCoreAppRefPackFrameworkListPath>
+  </PropertyGroup>
+
+  <Target Name="GetGenerateFrameworkListFileInputs"
+          DependsOnTargets="FindReferenceAssembliesForReferences;TrimOutPrivateAssembliesFromReferencePath">
+    <ItemGroup>
+      <RefPackLibFile Include="@(ReferencePathWithRefAssemblies)"
+                      TargetPath="ref/$(NetCoreAppCurrent)"
+                      Condition="$(NetCoreAppLibrary.Contains('%(Filename);'))" />
+    </ItemGroup>
+  </Target>
+
+  <UsingTask TaskName="CreateFrameworkListFile" AssemblyFile="$(DotNetSharedFrameworkTaskFile)"/>
+  <Target Name="GenerateFrameworkListFile"
+          DependsOnTargets="GetGenerateFrameworkListFileInputs"
+          AfterTargets="Build"
+          Inputs="@(RefPackLibFile)"
+          Outputs="$(MicrosoftNetCoreAppRefPackFrameworkListPath)">
+    <ItemGroup>
+      <FrameworkListRootAttribute Include="Name" Value="$(NetCoreAppCurrentBrandName)" />
+      <FrameworkListRootAttribute Include="TargetFrameworkIdentifier" Value="$(NetCoreAppCurrentIdentifier)" />
+      <FrameworkListRootAttribute Include="TargetFrameworkVersion" Value="$(NetCoreAppCurrentVersion)" />
+      <FrameworkListRootAttribute Include="FrameworkName" Value="$(MicrosoftNetCoreAppFrameworkName)" />
+    </ItemGroup>
+
+    <CreateFrameworkListFile Files="@(RefPackLibFile)"
+                             TargetFile="$(MicrosoftNetCoreAppRefPackFrameworkListPath)"
+                             TargetFilePrefixes="ref/;runtimes/"
+                             RootAttributes="@(FrameworkListRootAttribute)" />
+  </Target>
+
+</Project>

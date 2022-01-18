@@ -1,14 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <!-- IMPORTANT: please rebuild this project and check in the generated output 
-                  when making changes to this file -->
+<!-- IMPORTANT: please rebuild this project and check in the generated output 
+                when making changes to this file. -->
+<Project Sdk="Microsoft.Build.NoTargets">
+
   <ItemGroup>
     <GenFacadesContracts Include="@(NetFxReference)" ContractDir="NetFxRefPath" />
-    <GenFacadesContracts Include="netstandard" ContractDir="NETStandard21RefPath" />
   </ItemGroup>
   
   <Target Name="GenerateShimProjectFiles"
           Inputs="$(MSBuildProjectFile)"
-          Outputs="generated/%(GenFacadesContracts.Identity).csproj">
+          Outputs="generated/%(GenFacadesContracts.Identity).csproj"
+          AfterTargets="Build">
      <PropertyGroup>
        <_contractName>%(GenFacadesContracts.Identity)</_contractName>
        <_contractStrongNameKeyId>%(GenFacadesContracts.StrongNameKeyId)</_contractStrongNameKeyId>
@@ -51,10 +52,4 @@
       <Message Importance="High" Text="Generated $(_contractProjectFile)" />
   </Target>
 
-  <!-- boilerplate to satisfy Microsoft.Common.Targets -->
-  <PropertyGroup>
-    <SkipCopyBuildProduct>true</SkipCopyBuildProduct>
-  </PropertyGroup>
-  <Target Name="CreateManifestResourceNames" />
-  <Target Name="CoreCompile" DependsOnTargets="GenerateShimProjectFiles" />
 </Project>

@@ -66,7 +66,7 @@
       <Uri>https://github.com/dotnet/arcade</Uri>
       <Sha>86a931a4ebfa4d65630f0ff6cedf787d2e48a3b9</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.GenFacades" Version="7.0.0-beta.22075.6">
+    <Dependency Name="Microsoft.DotNet.GenFacades" Version="7.0.0-beta.22076.9">
       <Uri>https://github.com/dotnet/arcade</Uri>
       <Sha>86a931a4ebfa4d65630f0ff6cedf787d2e48a3b9</Sha>
     </Dependency>
@@ -102,7 +102,7 @@
       <Uri>https://github.com/dotnet/arcade</Uri>
       <Sha>86a931a4ebfa4d65630f0ff6cedf787d2e48a3b9</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.Build.Tasks.TargetFramework.Sdk" Version="7.0.0-beta.22075.6">
+    <Dependency Name="Microsoft.DotNet.Build.Tasks.TargetFramework.Sdk" Version="7.0.0-beta.22076.9">
       <Uri>https://github.com/dotnet/arcade</Uri>
       <Sha>86a931a4ebfa4d65630f0ff6cedf787d2e48a3b9</Sha>
     </Dependency>
