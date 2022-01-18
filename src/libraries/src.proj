@@ -34,7 +34,7 @@
                                 @(_allSrc)"
                        Exclude="@(NonNetCoreAppProject)" />
     <ManualShimProject Include="shims\manual\*.csproj" />
-    <ApiCompatProject Include="shims\ApiCompat.proj"
+    <ApiCompatProject Include="apicompat\ApiCompat.proj"
                       Condition="'$(DotNetBuildFromSource)' != 'true' and
                                  ('$(BuildTargetFramework)' == '$(NetCoreAppCurrent)' or '$(BuildTargetFramework)' == '') and
                                  '$(RunApiCompat)' != 'false'" />
