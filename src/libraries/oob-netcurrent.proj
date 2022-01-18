@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.Build.Traversal">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetCoreAppCurrent)-$(TargetOS)</TargetFramework>
+    <FilterTraversalProjectReferences>true</FilterTraversalProjectReferences>
+  </PropertyGroup>
+
+  <!-- Reference all .NETCoreApp out-of-band assemblies. -->
+  <ItemGroup>
+    <ProjectReference Include="$(MSBuildThisFileDirectory)*\src\*.*proj"
+                      Exclude="@(ProjectExclusions);
+                               $(MSBuildThisFileDirectory)*\src\**\*.shproj;
+                               @(NetCoreAppLibrary->'%(Identity)\src\%(Identity).csproj');
+                               Microsoft.VisualBasic.Core\src\Microsoft.VisualBasic.Core.vbproj;
+                               System.Runtime.CompilerServices.Unsafe\src\System.Runtime.CompilerServices.Unsafe.ilproj;
+                               Microsoft.NETCore.Platforms\src\Microsoft.NETCore.Platforms.csproj" />
+
+    <!-- Don't build meta-projects in the .NETCoreApp project. -->
+    <ProjectReference Remove="Microsoft.Internal.Runtime.AspNetCore.Transport\src\Microsoft.Internal.Runtime.AspNetCore.Transport.proj;
+                              Microsoft.Internal.Runtime.WindowsDesktop.Transport\src\Microsoft.Internal.Runtime.WindowsDesktop.Transport.proj;
+                              Microsoft.Windows.Compatibility\src\Microsoft.Windows.Compatibility.csproj" />
+
+    <!-- Filter out projects which aren't source-buildable. -->
+    <ProjectReference Remove="Microsoft.Extensions.DependencyInjection.Specification.Tests\src\Microsoft.Extensions.DependencyInjection.Specification.Tests.csproj"
+                      Condition="'$(DotNetBuildFromSource)' == 'true'" />
+
+    <!-- Filter out .NET Framework only projects.-->
+    <ProjectReference Remove="Microsoft.Diagnostics.Tracing.EventSource.Redist\src\Microsoft.Diagnostics.Tracing.EventSource.Redist.csproj" />
+  </ItemGroup>
+
+</Project>

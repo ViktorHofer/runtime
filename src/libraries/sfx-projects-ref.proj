@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.Build.Traversal">
+
+  <!-- This project is a hack but needs to exist as shared framework projects currently don't use P2Ps to reference each other.
+       Therefore reference assemblies must be available in the targeting pack directory before the shared framework source projects are built. -->
+
+  <PropertyGroup>
+    <TargetFramework>$(NetCoreAppCurrent)</TargetFramework>
+    <FilterTraversalProjectReferences>true</FilterTraversalProjectReferences>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AnyProject Include="$(MSBuildThisFileDirectory)*\ref\*.csproj"
+                Exclude="@(ProjectExclusions)" />
+    <NonNetCoreAppProject Include="@(AnyProject)"
+                          Exclude="@(NetCoreAppLibrary->'%(Identity)\ref\%(Identity).csproj')" />
+    <ProjectReference Include="@(AnyProject)"
+                      Exclude="@(NonNetCoreAppProject)" />
+  </ItemGroup>
+
+</Project>

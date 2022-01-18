@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.Build.Traversal">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetCoreAppCurrent)-$(TargetOS)</TargetFramework>
+    <FilterTraversalProjectReferences>true</FilterTraversalProjectReferences>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AnyProject Include="$(MSBuildThisFileDirectory)*\src\*.*proj"
+                Exclude="@(ProjectExclusions);
+                         $(MSBuildThisFileDirectory)*\src\**\*.shproj" />
+    <NonNetCoreAppProject Include="@(AnyProject)"
+                          Exclude="@(NetCoreAppLibrary->'%(Identity)\src\%(Identity).csproj');
+                                   Microsoft.VisualBasic.Core\src\Microsoft.VisualBasic.Core.vbproj;
+                                   System.Runtime.CompilerServices.Unsafe\src\System.Runtime.CompilerServices.Unsafe.ilproj" />
+    <ProjectReference Include="@(AnyProject);
+                               $(CoreLibProject)"
+                      Exclude="@(NonNetCoreAppProject)" />
+    <!-- S.P.Runtime.InteropServices is missing a platform independent tfm: https://github.com/dotnet/runtime/issues/46378. -->
+    <ProjectReference Remove="System.Private.Runtime.InteropServices.JavaScript\src\System.Private.Runtime.InteropServices.JavaScript.csproj"
+                      Condition="'$(TargetOS)' != 'browser'" />
+  </ItemGroup>
+
+</Project>

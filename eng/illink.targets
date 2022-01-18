@@ -217,6 +217,19 @@
     </PropertyGroup>
   </Target>
 
+  <Target Name="PrepareForAssembliesTrim"
+          DependsOnTargets="SetCommonILLinkArgs">
+
+    <!-- When running from Desktop MSBuild, DOTNET_HOST_PATH is not set.
+      In this case, explicitly specify the path to the dotnet host. -->
+    <PropertyGroup Condition=" '$(DOTNET_HOST_PATH)' == '' ">
+      <!-- This is defined when building in Visual Studio. -->
+      <_DotNetHostDirectory>$(NetCoreRoot)</_DotNetHostDirectory>
+      <_DotNetHostFileName>$([System.IO.Path]::GetFileName('$(DotNetTool)'))</_DotNetHostFileName>
+    </PropertyGroup>
+
+  </Target>
+
   <!-- ILLinkTrimAssembly
        Examines the "input assembly" for IL that is unreachable from public API and trims that,
        rewriting the assembly to an "output assembly"

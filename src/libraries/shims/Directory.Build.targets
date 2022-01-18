@@ -6,14 +6,7 @@
     <NetFxRefPath>$([MSBuild]::NormalizeDirectory('$(NuGetPackageRoot)', 'microsoft.netframework.referenceassemblies.$(NETFrameworkReferenceAssemblyTFM)', '$(MicrosoftNETFrameworkReferenceAssembliesLatestPackageVersion)', 'build', '.NETFramework', 'v4.8'))</NetFxRefPath>
   </PropertyGroup>
 
-  <!-- Download the corresponding targeting pack to build against the contract. -->
-  <ItemGroup Condition="'$(IsFrameworkSupportFacade)' == 'true' and '$(MSBuildProjectName)' == 'netstandard'">
-    <PackageDownload Include="NETStandard.Library.Ref"
-                     Version="[$(NETStandardLibraryRefVersion)]" />
-    <ResolvedMatchingContract Include="$(NETStandard21RefPath)$(MSBuildProjectName).dll" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(IsFrameworkSupportFacade)' == 'true' and '$(MSBuildProjectName)' != 'netstandard'">
+  <ItemGroup Condition="'$(MSBuildProjectName)' != 'netstandard'">
     <PackageDownload Include="Microsoft.NETFramework.ReferenceAssemblies.$(NETFrameworkReferenceAssemblyTFM)"
                      Version="[$(MicrosoftNETFrameworkReferenceAssembliesLatestPackageVersion)]" />
     <ResolvedMatchingContract Include="$(NetFxRefPath)$(MSBuildProjectName).dll" />

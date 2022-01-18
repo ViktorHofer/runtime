@@ -1,12 +1,10 @@
 <Project>
 
   <Import Project="..\Directory.Build.props" />
-  <Import Project="netfxreference.props" />
 
-  <PropertyGroup Condition="'$(IsFrameworkSupportFacade)' == 'true'">
-    <IsNETCoreAppSrc>true</IsNETCoreAppSrc>
-    <IsNETCoreAppRef>true</IsNETCoreAppRef>
-
+  <PropertyGroup>
+    <TargetFramework>$(NetCoreAppCurrent)-$(TargetOS)</TargetFramework>
+    <IsFrameworkSupportFacade>true</IsFrameworkSupportFacade>
     <IsPartialFacadeAssembly>true</IsPartialFacadeAssembly>
     <GenFacadesIgnoreMissingTypes>true</GenFacadesIgnoreMissingTypes>
     <!-- ensure the desktop compat shims reference the lowest possible version of dependencies
@@ -14,7 +12,6 @@
          to reference the latest packages.
          netstandard.dll doesn't need to do this since it has no dangling dependencies -->
     <GenFacadesForceZeroVersionSeeds Condition="'$(MSBuildProjectName)' != 'netstandard'">true</GenFacadesForceZeroVersionSeeds>
-    <HasMatchingContract>true</HasMatchingContract>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(MSBuildProjectName)' == 'System.Runtime' or
@@ -26,10 +23,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)System.Void.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(IsFrameworkSupportFacade)' == 'true'">
+  <ItemGroup>
     <!-- include any forwards needed by both generated and manual projects -->
     <Compile Condition="Exists('$(MSBuildThisFileDirectory)$(MSBuildProjectName).forwards.cs')"
                  Include="$(MSBuildThisFileDirectory)$(MSBuildProjectName).forwards.cs" />
+  </ItemGroup>
+
+  <!-- System.Data.SqlClient is not live built anymore, reference it manually. -->
+  <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient"
+                      Version="$(SystemDataSqlClientVersion)"
+                      PrivateAssets="all" />
   </ItemGroup>
 
 </Project>

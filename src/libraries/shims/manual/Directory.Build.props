@@ -1,10 +1,4 @@
 <Project>
-  <PropertyGroup>
-    <!-- ensure these projects use a different intermediate and output directory than generated projects -->
-    <OutDirName>manual.$(MSBuildProjectName)</OutDirName>
-    <IsFrameworkSupportFacade>true</IsFrameworkSupportFacade>
-  </PropertyGroup>
-
   <Import Project="..\Directory.Build.props" />
 
   <!-- import generated projects in order to share generated properties -->
@@ -12,15 +6,14 @@
 
   <PropertyGroup>
     <IsRuntimeAssembly>true</IsRuntimeAssembly>
-    <TargetFrameworks>$(NetCoreAppCurrent)</TargetFrameworks>
+    <!-- Manual shims compile against runtime assemblies. -->
+    <CompileUsingReferenceAssemblies>false</CompileUsingReferenceAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
-    <ReferencePath Include="$(NetCoreAppCurrentRuntimePath)System.*.dll;
-                            $(NetCoreAppCurrentRuntimePath)Microsoft.Win32.*.dll;
-                            $(NetCoreAppCurrentRuntimePath)netstandard.dll"
-                   Exclude="$(NetCoreAppCurrentRuntimePath)$(MSBuildProjectName).dll;
-                            $(NetCoreAppCurrentRuntimePath)System.*.Native.dll" />
-    <ProjectReference Include="$(CoreLibProject)" />
+    <ProjectReference Include="..\..\sfx-projects.proj;
+                               ..\..\oob-netcurrent.proj;
+                               ..\generated\netstandard.csproj;
+                               $(CoreLibProject)" />
   </ItemGroup>
 </Project>
