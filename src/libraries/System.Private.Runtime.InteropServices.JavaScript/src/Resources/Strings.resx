@@ -135,4 +135,7 @@
   <data name="UnableCastObjectToType" xml:space="preserve">
     <value>Unable to cast object of type {0} to type {1}.</value>
   </data>
+  <data name="PlatformNotSupported_InteropServicesJavaScript" xml:space="preserve">
+    <value>System.Runtime.InteropServices.JavaScript is not supported on this platform.</value>
+  </data>
 </root>

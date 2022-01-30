@@ -156,4 +156,7 @@
   <data name="net_http_request_invalid_char_encoding" xml:space="preserve">
     <value>Request headers must contain only ASCII characters.</value>
   </data>
+  <data name="PlatformNotSupported_NetHttp" xml:space="preserve">
+    <value>System.Net.Http is not supported on this platform.</value>
+  </data>
 </root>

@@ -2,8 +2,13 @@
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
-    <TargetFrameworks>$(NetCoreAppCurrent)-Browser</TargetFrameworks>
+    <TargetFrameworks>$(NetCoreAppCurrent)-Browser;$(NetCoreAppCurrent)</TargetFrameworks>
     <NoWarn>$(NoWarn);CA1419</NoWarn> <!-- // TODO https://github.com/dotnet/roslyn-analyzers/issues/5232: not intended for use with P/Invoke -->
+  </PropertyGroup>
+  <!-- DesignTimeBuild requires all the TargetFramework Derived Properties to not be present in the first property group. -->
+  <PropertyGroup>
+    <TargetPlatformIdentifier>$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
+    <GeneratePlatformNotSupportedAssemblyMessage Condition="'$(TargetPlatformIdentifier)' == ''">SR.PlatformNotSupported_InteropServicesJavaScript</GeneratePlatformNotSupportedAssemblyMessage>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetsBrowser)' == 'true'">
     <Compile Include="$(CommonPath)Interop\Browser\Interop.Runtime.cs" Link="Common\Interop\Browser\Interop.Runtime.cs" />
@@ -33,12 +38,10 @@
     <Compile Include="System\Runtime\InteropServices\JavaScript\JSObject.References.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Runtime" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetsBrowser)' == 'true'">
     <Reference Include="System.Collections" />
     <Reference Include="System.Memory" />
     <Reference Include="System.Net.Primitives" />
+    <Reference Include="System.Runtime" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe" />
     <Reference Include="System.Runtime.InteropServices" />
     <Reference Include="System.Threading" />
