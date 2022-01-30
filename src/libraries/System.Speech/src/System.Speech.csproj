@@ -17,10 +17,12 @@ Commonly Used Types
 System.Speech.Synthesis.SpeechSynthesizer
 System.Speech.Recognition.SpeechRecognizer</PackageDescription>
   </PropertyGroup>
+  <!-- DesignTimeBuild requires all the TargetFramework Derived Properties to not be present in the first property group. -->
   <PropertyGroup>
+    <TargetPlatformIdentifier>$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
     <!-- System.Speech has its own SR scheme in which resource ID's are mapped to SAPI error codes. So we disable our default SR.cs generation and include resources explicitly -->
-    <OmitResources Condition="'$(TargetsWindows)' == 'true'">true</OmitResources>
-    <GeneratePlatformNotSupportedAssemblyMessage Condition="'$(TargetsWindows)' != 'true'">SR.PlatformNotSupported_SystemSpeech</GeneratePlatformNotSupportedAssemblyMessage>
+    <OmitResources Condition="'$(TargetFramework)' != 'netstandard2.0' and '$(TargetPlatformIdentifier)' == 'windows'">true</OmitResources>
+    <GeneratePlatformNotSupportedAssemblyMessage Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetPlatformIdentifier)' == ''">SR.PlatformNotSupported_SystemSpeech</GeneratePlatformNotSupportedAssemblyMessage>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetsWindows)' == 'true'">
     <Compile Include="SR.cs" />

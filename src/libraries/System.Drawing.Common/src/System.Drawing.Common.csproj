@@ -3,7 +3,6 @@
     <DefineConstants>$(DefineConstants);DRAWING_NAMESPACE</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <WarningsNotAsErrors>CS0618</WarningsNotAsErrors>
-    <DefineConstants Condition="'$(TargetsWindows)' == 'true'">$(DefineConstants);FEATURE_WINDOWS_SYSTEM_COLORS;FEATURE_SYSTEM_EVENTS</DefineConstants>
     <IsPartialFacadeAssembly>true</IsPartialFacadeAssembly>
     <TargetFrameworks>$(NetCoreAppCurrent)-windows;$(NetCoreAppCurrent)-Unix;$(NetCoreAppCurrent);$(NetCoreAppMinimum)-windows;$(NetCoreAppMinimum)-Unix;$(NetCoreAppMinimum);netstandard2.0;$(NetFrameworkMinimum)</TargetFrameworks>
     <Nullable>enable</Nullable>
@@ -23,8 +22,10 @@ Unix support is disabled by default. See https://aka.ms/systemdrawingnonwindows 
   </PropertyGroup>
   <!-- DesignTimeBuild requires all the TargetFramework Derived Properties to not be present in the first property group. -->
   <PropertyGroup>
+    <TargetPlatformIdentifier>$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
+    <DefineConstants Condition="'$(TargetPlatformIdentifier)' == 'windows'">$(DefineConstants);FEATURE_WINDOWS_SYSTEM_COLORS;FEATURE_SYSTEM_EVENTS</DefineConstants>
     <IncludeInternalObsoleteAttribute Condition="$([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)')) != '.NETFramework'">true</IncludeInternalObsoleteAttribute>
-    <GeneratePlatformNotSupportedAssemblyMessage Condition="'$(TargetsAnyOS)' == 'true' and $([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)')) != '.NETFramework'">SR.SystemDrawingCommon_PlatformNotSupported</GeneratePlatformNotSupportedAssemblyMessage>
+    <GeneratePlatformNotSupportedAssemblyMessage Condition="$([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)')) != '.NETFramework' and ('$(TargetFramework)' == 'netstandard2.0' or '$(TargetPlatformIdentifier)' == '')">SR.SystemDrawingCommon_PlatformNotSupported</GeneratePlatformNotSupportedAssemblyMessage>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
     <Compile Include="$(CoreLibSharedDir)System\Diagnostics\CodeAnalysis\RequiresUnreferencedCodeAttribute.cs" />

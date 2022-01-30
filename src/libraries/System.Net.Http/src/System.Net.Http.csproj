@@ -6,29 +6,16 @@
     <TargetFrameworks>$(NetCoreAppCurrent)-windows;$(NetCoreAppCurrent)-Linux;$(NetCoreAppCurrent)-OSX;$(NetCoreAppCurrent)-FreeBSD;$(NetCoreAppCurrent)-MacCatalyst;$(NetCoreAppCurrent)-iOS;$(NetCoreAppCurrent)-tvOS;$(NetCoreAppCurrent)-Browser;$(NetCoreAppCurrent)-illumos;$(NetCoreAppCurrent)-Solaris;$(NetCoreAppCurrent)-Android</TargetFrameworks>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetsOSX)' == 'true' or '$(TargetsiOS)' == 'true' or '$(TargetstvOS)' == 'true' or '$(TargetsMacCatalyst)' == 'true'">
-    <DefineConstants>$(DefineConstants);SYSNETHTTP_NO_OPENSSL</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetsAndroid)' == 'true' or '$(TargetsiOS)' == 'true' or '$(TargetsMacCatalyst)' == 'true' or '$(TargetsTVOS)' == 'true'">
-    <DefineConstants>$(DefineConstants);TARGET_MOBILE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetsAndroid)' == 'true'">
-    <DefineConstants>$(DefineConstants);TARGET_ANDROID</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetsiOS)' == 'true'">
-    <DefineConstants>$(DefineConstants);TARGET_IOS</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetsMacCatalyst)' == 'true'">
-    <DefineConstants>$(DefineConstants);TARGET_MACCATALYST</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetsTVOS)' == 'true'">
-    <DefineConstants>$(DefineConstants);TARGET_TVOS</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetsBrowser)' == 'true'">
-    <DefineConstants>$(DefineConstants);TARGET_BROWSER</DefineConstants>
-  </PropertyGroup>
-  <!-- ILLinker settings -->
   <PropertyGroup>
+    <TargetPlatformIdentifier>$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
+    <DefineConstants Condition="'$(TargetPlatformIdentifier)' == 'OSX' or '$(TargetPlatformIdentifier)' == 'iOS' or '$(TargetPlatformIdentifier)' == 'tvOS' or '$(TargetPlatformIdentifier)' == 'MacCatalyst'">$(DefineConstants);SYSNETHTTP_NO_OPENSSL</DefineConstants>
+    <DefineConstants Condition="'$(TargetPlatformIdentifier)' == 'Android' or '$(TargetPlatformIdentifier)' == 'iOS' or '$(TargetPlatformIdentifier)' == 'MacCatalyst' or '$(TargetPlatformIdentifier)' == 'tvOS'">$(DefineConstants);TARGET_MOBILE</DefineConstants>
+    <DefineConstants Condition="'$(TargetPlatformIdentifier)' == 'Android'">$(DefineConstants);TARGET_ANDROID</DefineConstants>
+    <DefineConstants Condition="'$(TargetPlatformIdentifier)' == 'iOS'">$(DefineConstants);TARGET_IOS</DefineConstants>
+    <DefineConstants Condition="'$(TargetPlatformIdentifier)' == 'MacCatalyst'">$(DefineConstants);TARGET_MACCATALYST</DefineConstants>
+    <DefineConstants Condition="'$(TargetPlatformIdentifier)' == 'tvOS'">$(DefineConstants);TARGET_TVOS</DefineConstants>
+    <DefineConstants Condition="'$(TargetPlatformIdentifier)' == 'Browser'">$(DefineConstants);TARGET_BROWSER</DefineConstants>
+    <!-- ILLinker settings -->
     <ILLinkDirectory>$(MSBuildThisFileDirectory)ILLink\</ILLinkDirectory>
   </PropertyGroup>
   <ItemGroup>

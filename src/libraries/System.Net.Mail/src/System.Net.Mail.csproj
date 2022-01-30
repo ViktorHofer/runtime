@@ -3,9 +3,12 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <TargetFrameworks>$(NetCoreAppCurrent)-windows;$(NetCoreAppCurrent)-Unix;$(NetCoreAppCurrent)-Browser;$(NetCoreAppCurrent)-tvOS</TargetFrameworks>
     <Nullable>enable</Nullable>
-    <DefineConstants Condition="'$(TargetstvOS)' == 'true'">$(DefineConstants);NO_NTAUTHENTICATION</DefineConstants>
   </PropertyGroup>
   <!-- DesignTimeBuild requires all the TargetFramework Derived Properties to not be present in the first property group. -->
+  <PropertyGroup>
+    <TargetPlatformIdentifier>$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
+    <DefineConstants Condition="'$(TargetPlatformIdentifier)' == 'tvOS'">$(DefineConstants);NO_NTAUTHENTICATION</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="System\Net\Base64Stream.cs" />
     <Compile Include="System\Net\Mime\MimePart.cs" />

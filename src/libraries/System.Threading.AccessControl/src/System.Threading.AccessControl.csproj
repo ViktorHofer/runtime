@@ -18,8 +18,10 @@ System.Security.AccessControl.SemaphoreSecurity</PackageDescription>
   </PropertyGroup>
   <!-- DesignTimeBuild requires all the TargetFramework Derived Properties to not be present in the first property group. -->
   <PropertyGroup>
+    <TargetPlatformIdentifier>$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
     <IsPartialFacadeAssembly Condition="$([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)')) == '.NETFramework'">true</IsPartialFacadeAssembly>
-    <GeneratePlatformNotSupportedAssemblyMessage Condition="'$(IsPartialFacadeAssembly)' != 'true' and '$(TargetsWindows)' != 'true'">SR.PlatformNotSupported_AccessControl</GeneratePlatformNotSupportedAssemblyMessage>
+    <!-- TargetFrameworkSuffix property must be used when netstandard2.0-windows is part of the condition. -->
+    <GeneratePlatformNotSupportedAssemblyMessage Condition="'$(IsPartialFacadeAssembly)' != 'true' and (('$(TargetFramework)' == 'netstandard2.0' and '$(TargetFrameworkSuffix)' == '') or ('$(TargetFramework)' != 'netstandard2.0' and '$(TargetPlatformIdentifier)' != 'windows'))">SR.PlatformNotSupported_AccessControl</GeneratePlatformNotSupportedAssemblyMessage>
   </PropertyGroup>
   <ItemGroup Condition="'$(IsPartialFacadeAssembly)' != 'true' and '$(TargetsWindows)' == 'true'">
     <Compile Include="$(CommonPath)Interop\Windows\Interop.Errors.cs"

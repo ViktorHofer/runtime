@@ -3,18 +3,16 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>$(DefineConstants);INTERNAL_ASYMMETRIC_IMPLEMENTATIONS</DefineConstants>
     <TargetFrameworks>$(NetCoreAppCurrent)-windows;$(NetCoreAppCurrent)-Unix;$(NetCoreAppCurrent)-Android;$(NetCoreAppCurrent)-OSX;$(NetCoreAppCurrent)-iOS;$(NetCoreAppCurrent)-tvOS;$(NetCoreAppCurrent)-Browser;$(NetCoreAppCurrent)</TargetFrameworks>
-    <NoWarn>$(NoWarn);CA5350;CA5351;CA5379;CA5384</NoWarn>
+    <NoWarn>$(NoWarn);CA5350;CA5351;CA5379;CA5384;SYSLIB0026</NoWarn>
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
-    <GeneratePlatformNotSupportedAssemblyMessage Condition="'$(TargetsAnyOS)' == 'true'">SR.SystemSecurityCryptography_PlatformNotSupported</GeneratePlatformNotSupportedAssemblyMessage>
-    <NoWarn>$(NoWarn);SYSLIB0026</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup>
-    <UseAndroidCrypto Condition="'$(TargetsAndroid)' == 'true'">true</UseAndroidCrypto>
-    <UseAppleCrypto Condition="'$(TargetsOSX)' == 'true' or '$(TargetsiOS)' == 'true' or '$(TargetstvOS)' == 'true'">true</UseAppleCrypto>
-    <UseOpenSsl Condition="'$(TargetsUnix)' == 'true' and '$(UseAndroidCrypto)' != 'true' and '$(UseAppleCrypto)' != 'true'">true</UseOpenSsl>
-    <UseOpenSslAead Condition="'$(UseOpenSsl)' == 'true' or '$(TargetsOSX)' == 'true'">true</UseOpenSslAead>
+    <TargetPlatformIdentifier>$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
+    <GeneratePlatformNotSupportedAssemblyMessage Condition="'$(TargetPlatformIdentifier)' == ''">SR.SystemSecurityCryptography_PlatformNotSupported</GeneratePlatformNotSupportedAssemblyMessage>
+    <UseAndroidCrypto Condition="'$(TargetPlatformIdentifier)' == 'Android'">true</UseAndroidCrypto>
+    <UseAppleCrypto Condition="'$(TargetPlatformIdentifier)' == 'OSX' or '$(TargetPlatformIdentifier)' == 'iOS' or '$(TargetPlatformIdentifier)' == 'tvOS'">true</UseAppleCrypto>
+    <UseOpenSsl Condition="'$(TargetPlatformIdentifier)' == 'Unix'">true</UseOpenSsl>
+    <UseOpenSslAead Condition="'$(UseOpenSsl)' == 'true' or '$(TargetPlatformIdentifier)' == 'OSX'">true</UseOpenSslAead>
     <NeedOpenSslInitializer Condition="'$(UseOpenSslAead)' == 'true'">true</NeedOpenSslInitializer>
   </PropertyGroup>
   <Import Project="$(CommonPath)System\Security\Cryptography\Asn1\AsnXml.targets" Condition="'$(GeneratePlatformNotSupportedAssemblyMessage)' == ''" />
