@@ -61,32 +61,96 @@
       </AssemblyAttribute>
     </ItemGroup>
   </Target>
-
-  <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == '' and !$(TargetFrameworks.Contains('$(TargetFramework)-Browser'))">
-    <CrossPlatformAndHasNoBrowserTarget>true</CrossPlatformAndHasNoBrowserTarget>
-  </PropertyGroup>
-
-  <!-- Enables warnings for Android, iOS, tvOS and macCatalyst for all builds -->
+  
+  <!-- Keep in sync with Microsoft.NET.SupportedPlatforms.props and OSGroups.json. -->
   <ItemGroup>
-    <SupportedPlatform Include="Android" />
-    <SupportedPlatform Include="iOS" />
-    <SupportedPlatform Include="tvOS" />
-    <SupportedPlatform Include="macCatalyst" />
-  </ItemGroup>
-
-  <!-- Enables browser warnings for cross platform or Browser targeted builds -->
-  <ItemGroup Condition="('$(TargetPlatformIdentifier)' == 'Browser' or '$(CrossPlatformAndHasNoBrowserTarget)' == 'true') and '$(IsTestProject)' != 'true'">
-    <SupportedPlatform Include="browser"/>
-  </ItemGroup>
-
-  <!-- Add target platforms into MSBuild SupportedPlatform list -->
-  <ItemGroup Condition="'$(IsTestProject)' != 'true'">
-    <SupportedPlatform Condition="'$(TargetPlatformIdentifier)' == 'illumos'" Include="illumos" />
-    <SupportedPlatform Condition="'$(TargetPlatformIdentifier)' == 'Solaris'" Include="Solaris" />
-    <SupportedPlatform Condition="'$(TargetPlatformIdentifier)' == 'tvOS'" Include="tvOS" />
-    <SupportedPlatform Condition="'$(TargetPlatformIdentifier)' != '' and
-                                  '$(TargetPlatformIdentifier)' != 'Browser' and
-                                  '$(TargetPlatformIdentifier)' != 'windows'" Include="Unix" />
+    <SupportedPlatform Remove="@(SupportedPlatform)" />
+    <SupportedPlatform Include="Windows"
+                       Condition="'$(TargetPlatformIdentifier)' == 'windows' or
+                                  (
+                                   '$(TargetPlatformIdentifier)' == '' and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-windows'))
+                                  )" />
+    <SupportedPlatform Include="macOS"
+                       Condition="'$(TargetPlatformIdentifier)' == 'OSX' or
+                                  '$(TargetPlatformIdentifier)' == 'Unix' or
+                                  (
+                                   '$(TargetPlatformIdentifier)' == '' and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-OSX')) and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Unix'))
+                                  )" />
+    <SupportedPlatform Include="Linux"
+                       Condition="'$(TargetPlatformIdentifier)' == 'Linux' or
+                                  '$(TargetPlatformIdentifier)' == 'Unix' or
+                                  (
+                                   '$(TargetPlatformIdentifier)' == '' and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Linux')) and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Unix'))
+                                  )" />
+    <SupportedPlatform Include="Browser"
+                       Condition="'$(TargetPlatformIdentifier)' == 'Browser' or
+                                  (
+                                   '$(TargetPlatformIdentifier)' == '' and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Browser'))
+                                  )" />
+    <SupportedPlatform Include="Android"
+                       Condition="'$(TargetPlatformIdentifier)' == 'Android' or
+                                  '$(TargetPlatformIdentifier)' == 'Linux' or
+                                  '$(TargetPlatformIdentifier)' == 'Unix' or
+                                  (
+                                   '$(TargetPlatformIdentifier)' == '' and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Android')) and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Linux')) and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Unix'))
+                                  )" />
+    <SupportedPlatform Include="iOS"
+                       Condition="'$(TargetPlatformIdentifier)' == 'iOS' or
+                                  '$(TargetPlatformIdentifier)' == 'Unix' or
+                                  (
+                                   '$(TargetPlatformIdentifier)' == '' and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-iOS')) and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Unix'))
+                                  )" />
+    <SupportedPlatform Include="tvOS"
+                       Condition="'$(TargetPlatformIdentifier)' == 'tvOS' or
+                                  '$(TargetPlatformIdentifier)' == 'Unix' or
+                                  (
+                                   '$(TargetPlatformIdentifier)' == '' and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-tvOS')) and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Unix'))
+                                  )" />
+    <SupportedPlatform Include="macCatalyst"
+                       Condition="'$(TargetPlatformIdentifier)' == 'macCatalyst' or
+                                  '$(TargetPlatformIdentifier)' == 'iOS' or
+                                  '$(TargetPlatformIdentifier)' == 'Unix' or
+                                  (
+                                   '$(TargetPlatformIdentifier)' == '' and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-macCatalyst')) and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-iOS')) and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Unix'))
+                                  )" />
+    <SupportedPlatform Include="illumos"
+                       Condition="'$(TargetPlatformIdentifier)' == 'illumos' or
+                                  '$(TargetPlatformIdentifier)' == 'Unix' or
+                                  (
+                                   '$(TargetPlatformIdentifier)' == '' and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-illumos')) and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Unix'))
+                                  )" />
+    <SupportedPlatform Include="Solaris"
+                       Condition="'$(TargetPlatformIdentifier)' == 'Solaris' or
+                                  '$(TargetPlatformIdentifier)' == 'Unix' or
+                                  (
+                                   '$(TargetPlatformIdentifier)' == '' and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Solaris')) and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Unix'))
+                                  )" />
+    <SupportedPlatform Include="Unix"
+                       Condition="'$(TargetPlatformIdentifier)' == 'Unix' or
+                                  (
+                                   '$(TargetPlatformIdentifier)' == '' and
+                                   !$(TargetFrameworks.Contains('$(TargetFramework)-Unix'))
+                                  )" />
   </ItemGroup>
 
   <!-- Add PlatformNeutralAssembly property for targeted builds of cross platform assemblies -->
